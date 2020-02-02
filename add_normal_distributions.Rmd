@@ -1,0 +1,77 @@
+---
+title: "What happens when you add up two normally distributed random variables?"
+author: "Till Bieg"
+date: "`r Sys.Date()`"
+output:
+  prettydoc::html_pretty:
+    theme: hpstr
+    highlight: github
+---
+
+## Simulate normally distrubuted random variables
+First, we create two normally distrubted random variables $X$ and $Y$.
+```{r, message = FALSE, warning = FALSE}
+library(tidyverse)
+set.seed(42)
+
+X <- rnorm(1000, mean = -40, sd = 10)
+Y <- rnorm(1000, mean = 40, sd = 10)
+```
+
+We put them in a tibble, so that they are easier to work with.
+```{r}
+distb_df <- tibble(X, Y)
+
+head(distb_df) %>% knitr::kable()
+```
+
+## Add up random variables
+Inside our tibble, we create an `id` variable (we will need it later for reshaping the data) and a `X + Y` variable that contains the sum of $X$ and $Y$.
+```{r}
+distb_df <- distb_df %>% 
+            mutate(id = 1:nrow(distb_df),
+                   `X + Y` = X + Y)
+```
+
+## Compare distributions
+Next, we take a look at the mean and standard deviation of all three distributions.
+```{r}
+distb_df %>% 
+  summarize_at(vars(X, Y, `X + Y`), list(mean = mean, sd = sd))
+```
+
+It seems like the mean of $X + Y$ is equal to the sum of the means of $X$ and $Y$. When we check if both values are the same R returns `FALSE`. 
+
+```{r}
+mean(distb_df$`X + Y`) == sum(mean(distb_df$X), mean(distb_df$Y))
+```
+
+However, this is (probably) because we look at empirical distributions (and also due to rounding):
+
+```{r}
+round(mean(distb_df$`X + Y`), 7) == round(sum(mean(distb_df$X),
+                                              mean(distb_df$Y)),
+                                          7)
+```
+
+In conclusion, the mean of $X + Y$ is (roughly) equal to sum of the means of $X$ and $Y$.
+
+For the standard deviation, it appears to be a bit trickier. But a quick search reveals that the standard deviation of $X + Y$ is equal to $\sqrt{\sigma^2_{X} + \sigma^2_{Y}}$. Let's check this using R:
+```{r}
+sd(distb_df$`X + Y`)
+sqrt(sum(sd(distb_df$X)^2, sd(distb_df$Y)^2))
+```
+
+The values are roughly equal. In general, this confirms our assumptions about the standard deviations. Keep in mind that the results are approximated because we work with empirical distributions.
+
+Lastly, let's make a plot that visualizes what we just found out about the means and standard deviations:
+
+```{r}
+distb_df %>% 
+  gather(variable, value, -id) %>% 
+  ggplot(aes(x = value, fill = variable)) +
+  geom_density(alpha = 0.2) +
+  theme_bw()
+```
+
+Note that the mean of $X$ is negative while the mean of $Y$ is positive. As a result, the mean of $X + Y$ is roughly around 0. We can also see that the distribution of $X + Y$ is wider compared to $X$ and $Y$ respectively. In summary, the plot is consistent with our findings from before.
