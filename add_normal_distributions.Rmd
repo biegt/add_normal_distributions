@@ -56,7 +56,7 @@ round(mean(distb_df$`X + Y`), 7) == round(sum(mean(distb_df$X),
 
 In conclusion, the mean of $X + Y$ is (roughly) equal to sum of the means of $X$ and $Y$.
 
-For the standard deviation, it appears to be a bit trickier. But a quick search reveals that the standard deviation of $X + Y$ is equal to $\sqrt{\sigma^2_{X} + \sigma^2_{Y}}$. Let's check this using R:
+For the standard deviation, it appears to be a bit trickier. "In theory", $s_{X + Y}$ should be equal to $\sqrt{s^2_{X} + s^2_{Y}}$, where $s_{.}$ is the standard deviation of the respective distribution. Let's check this using R:
 ```{r}
 sd(distb_df$`X + Y`)
 sqrt(sum(sd(distb_df$X)^2, sd(distb_df$Y)^2))

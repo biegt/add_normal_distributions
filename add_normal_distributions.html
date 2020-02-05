@@ -13,7 +13,7 @@
 
 <meta name="author" content="Till Bieg" />
 
-<meta name="date" content="2020-02-02" />
+<meta name="date" content="2020-02-05" />
 
 <title>What happens when you add up two normally distributed random variables?</title>
 
@@ -146,7 +146,7 @@ code span.ot { color: #007020; }
 <div class="header-title-wrap">
 <h1 class="title toc-ignore entry-title">What happens when you add up two normally distributed random variables?</h1>
 <h3 class="author">Till Bieg</h3>
-<h3 class="date">2020-02-02</h3>
+<h3 class="date">2020-02-05</h3>
 </div><!-- /.header-title-wrap -->
 </header>
 
@@ -225,7 +225,7 @@ code span.ot { color: #007020; }
 <a class="sourceLine" id="cb8-3" title="3">                                          <span class="dv">7</span>)</a></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>In conclusion, the mean of <span class="math inline">\(X + Y\)</span> is (roughly) equal to sum of the means of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>.</p>
-<p>For the standard deviation, it appears to be a bit trickier. But a quick search reveals that the standard deviation of <span class="math inline">\(X + Y\)</span> is equal to <span class="math inline">\(\sqrt{\sigma^2_{X} + \sigma^2_{Y}}\)</span>. Let’s check this using R:</p>
+<p>For the standard deviation, it appears to be a bit trickier. “In theory”, <span class="math inline">\(s_{X + Y}\)</span> should be equal to <span class="math inline">\(\sqrt{s^2_{X} + s^2_{Y}}\)</span>, where <span class="math inline">\(s_{.}\)</span> is the standard deviation of the respective distribution. Let’s check this using R:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="kw">sd</span>(distb_df<span class="op">$</span><span class="st">`</span><span class="dt">X + Y</span><span class="st">`</span>)</a></code></pre></div>
 <pre><code>## [1] 14.13188</code></pre>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="kw">sqrt</span>(<span class="kw">sum</span>(<span class="kw">sd</span>(distb_df<span class="op">$</span>X)<span class="op">^</span><span class="dv">2</span>, <span class="kw">sd</span>(distb_df<span class="op">$</span>Y)<span class="op">^</span><span class="dv">2</span>))</a></code></pre></div>
